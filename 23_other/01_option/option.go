@@ -1,5 +1,6 @@
 package option
 
+// 选项或配置创建模式，一般用来初始化配置项
 type Option struct {
 	A string
 	B string
@@ -15,17 +16,14 @@ func newOption(a, b string, c int) *Option {
 	}
 }
 
+// 定义设置option的方法类型
+// 参数是option结构体，实际上传入的是默认的option属性
 type OptionFunc func(*Option)
 
+// 定义属性的设置方法，那个属性需要设置就创建对应的设置方法
 func WithA(a string) OptionFunc {
 	return func(o *Option) {
 		o.A = a
-	}
-}
-
-func WithB(b string) OptionFunc {
-	return func(o *Option) {
-		o.B = b
 	}
 }
 
@@ -42,10 +40,9 @@ var defaultOption = &Option{
 }
 
 // option模式下的创建方法
-func newOption2(opts ...OptionFunc) (opt *Option) {
-	opt = defaultOption
+func newOption2(opts ...OptionFunc) *Option {
 	for _, o := range opts {
-		o(opt)
+		o(defaultOption)
 	}
-	return
+	return defaultOption
 }
